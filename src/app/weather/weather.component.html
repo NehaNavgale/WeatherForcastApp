@@ -1,0 +1,84 @@
+<div class="container weatherContainermain">
+  <div class="row">
+    <div class="col-sm-5">
+      <div class=" align-content-center rounded weatherBoxshadow1 fixHeight">
+        <form #weathersearch = "ngForm" (ngSubmit) = "submitWeatherParameters(weathersearch.value)" >
+          <div style="padding-top: 15px" class="form-group row" >
+            <div class="col-sm-5">
+              <label for="state" class="weatherLabel1">Enter State Code:</label>
+            </div>
+            <div class="col-sm-7 ">
+              <input type="text" style="width:100%"   class="form-control" name="state" id="state" ngModel>
+            </div>
+          </div>
+          <div class="form-group row ">
+            <div class="col-sm-5 ">
+              <label for="city"  class="weatherLabel1">Enter City Name : </label>
+            </div>
+            <div class="col-sm-7 ">
+              <input type="text" style="width:100%" class="form-control" name="city" id="city" ngModel>
+            </div>
+          </div>
+          <div class="weatherButtonContainer">
+            <button type="submit" class="btn btn-info text-white">Get Weather Details</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-sm-7 prl-0">
+      <div class=" weatheresult rounded weatherBoxshadow1 weatherfixHeight" style="width:700px">
+        <div *ngIf="loadMessage">Please enter State Code, City Name and click on Get Weather Details button to get the current weather condition. </div>
+        <div *ngIf="!currentWeatherData.current_observation" class="bg-danger">{{errorMessageText}}</div>
+        <div *ngIf="currentWeatherData.current_observation">
+          <h3>{{cityName}}</h3>
+          <span class="font-italic">({{currentDate | date:"MMMM d, h:mm a"}})</span>
+          <div class="row">
+            <div class="col-sm-5 prl-0">
+              <figure>
+                <img class="weatherMainimage" src={{currentWeatherData.current_observation.icon_url}}/>
+                <figcaption class="figure-caption text-white text-center">{{currentWeatherData.current_observation.icon}}</figcaption>
+              </figure>
+            </div>
+            <div class="col-sm-7 prl-0">
+              <div>Temperature: {{currentWeatherData.current_observation.temperature_string}}</div>
+              <div>Real Feel: {{currentWeatherData.current_observation.feelslike_string}}</div>
+              <div>Wind: {{currentWeatherData.current_observation.wind_mph}} mph </div>
+              <div>Humidity: {{currentWeatherData.current_observation.relative_humidity}}</div>
+              <div>({{currentWeatherData.current_observation.observation_time}})</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div *ngIf="currentWeatherData.current_observation">
+    <div class="row" >
+      <div class="col-sm-12" style="color: white;padding: 30px 10px 10px 10px;"  *ngIf="forecastFlag==1" >
+        <h3>Hourly Forecast</h3>
+      </div>
+    </div>
+    <div class="row m-0">
+      <div  class="col-md-2 m-37" *ngFor="let hourlyData of forecastData | slice:1:6;" >
+        <div class=" weatherBoxshadow1 weatheresult fixHeightForecast" >
+          <b>{{hourlyData.FCTTIME.civil}}</b>
+          <div class="row" style="padding-left: 70px;">
+            <img src={{hourlyData.icon_url}}>
+          </div>
+          <div style ="padding-left:60px" class="row" >
+            {{hourlyData.icon}}
+          </div>
+          <div class="row" style = "font-size: 14px;margin: auto; ">
+            <div class="col-md-12" style="padding-left: 20px;padding-top:15px">
+              Temperature : {{hourlyData.temp.english}} F <br>
+              Real Feel : {{hourlyData.feelslike.english}} F<br>
+              Wind : {{hourlyData.windchill.metric}} mph<br>
+              Humidity : {{hourlyData.humidity}}%
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
